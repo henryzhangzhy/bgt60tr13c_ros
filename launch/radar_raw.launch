@@ -1,0 +1,8 @@
+<launch>
+
+    <node pkg="bgt60tr13c_ros" type="tr13c_node.py" name="tr13c_raw_node" output="screen">
+    </node>
+
+    <!-- <node pkg="bgt60ltr11aip_ros" type="ltr11_plot.py" name="ltr11_plot_node" output="screen" /> -->
+
+</launch>

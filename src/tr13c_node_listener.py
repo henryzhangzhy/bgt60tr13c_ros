@@ -127,16 +127,18 @@ def radar_callback(msg):
     #print(radar_data)
 
 
+    # PEAKING ALGORITHM DEMO ####################################
     # num_chirps_per_frame = 128
     # num_samples_per_chirp = 64
-    algo = PresenceAntiPeekingAlgo(num_samples_per_chirp, num_chirps_per_frame)
+    # algo = PresenceAntiPeekingAlgo(num_samples_per_chirp, num_chirps_per_frame)
 
-    # matrix of dimension num_chirps_per_frame x num_samples_per_chirp for RX1
-    mat = frame[2, :, :]
-    presence_status, peeking_status = algo.presence(mat)
+    # # matrix of dimension num_chirps_per_frame x num_samples_per_chirp for RX1
+    # mat = frame[0, :, :]
+    # presence_status, peeking_status = algo.presence(mat)
 
-    print(f" Presence: {presence_status}")
-    print(f"       Peeking: {peeking_status}")
+    # print(f" Presence: {presence_status}")
+    # print(f"       Peeking: {peeking_status}")
+    ###############################################################
 
 if __name__ == '__main__':
     rospy.init_node("radar_tr13c_node_listener")

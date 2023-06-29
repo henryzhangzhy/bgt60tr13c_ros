@@ -35,19 +35,35 @@ if __name__ == '__main__':
 
 
     # Configuration for "Peaking" / Presence Detection Demo
+    # config = Avian.DeviceConfig(
+    #     sample_rate_Hz = 1e6,                   # ADC sample rate of 1MHz
+    #     rx_mask = 1,                            # RX antenna 1 activated
+    #     tx_mask = 1,                            # TX antenna 1 activated
+    #     tx_power_level = 31,                    # TX power level of 31
+    #     if_gain_dB = 33,                        # 33dB if gain
+    #     start_frequency_Hz = 59_133_931_281,    # start frequency: 59.133931281 GHz
+    #     end_frequency_Hz = 62_366_068_720,      # end frequency: 62.366068720 GHz
+    #     num_samples_per_chirp = 64,             # 64 samples per chirp
+    #     num_chirps_per_frame = 32,              # 32 chirps per frame
+    #     chirp_repetition_time_s = 0.000411238,  # Chirp repetition time (or pulse repetition time) of 411.238us
+    #     frame_repetition_time_s = 0.2, # Frame repetition time default 0.2s (frame rate of 5Hz)
+    #     mimo_mode = "off")  
+    
+    # Configuration for the "Range-Angle Map"
     config = Avian.DeviceConfig(
-        sample_rate_Hz = 1e6,                   # ADC sample rate of 1MHz
-        rx_mask = 1,                            # RX antenna 1 activated
-        tx_mask = 1,                            # TX antenna 1 activated
-        tx_power_level = 31,                    # TX power level of 31
-        if_gain_dB = 33,                        # 33dB if gain
-        start_frequency_Hz = 59_133_931_281,    # start frequency: 59.133931281 GHz
-        end_frequency_Hz = 62_366_068_720,      # end frequency: 62.366068720 GHz
-        num_samples_per_chirp = 64,             # 64 samples per chirp
-        num_chirps_per_frame = 32,              # 32 chirps per frame
-        chirp_repetition_time_s = 0.000411238,  # Chirp repetition time (or pulse repetition time) of 411.238us
-        frame_repetition_time_s = 0.2, # Frame repetition time default 0.2s (frame rate of 5Hz)
-        mimo_mode = "off")  
+        sample_rate_Hz = 1_000_000,       # 1MHZ
+        rx_mask = 5,                      # activate RX1 and RX3
+        tx_mask = 1,                      # activate TX1
+        if_gain_dB = 33,                  # gain of 33dB
+        tx_power_level = 31,              # TX power level of 31
+        start_frequency_Hz = 60e9,        # 60GHz 
+        end_frequency_Hz = 61.5e9,        # 61.5GHz
+        num_chirps_per_frame = 128,       # 128 chirps per frame
+        num_samples_per_chirp = 64,       # 64 samples per chirp
+        chirp_repetition_time_s = 0.0005, # 0.5ms
+        frame_repetition_time_s = 0.15,   # 0.15s, frame_Rate = 6.667Hz
+        mimo_mode = 'off'                 # MIMO disabled
+    )
     
 
     print("Setting Device with Config", config)

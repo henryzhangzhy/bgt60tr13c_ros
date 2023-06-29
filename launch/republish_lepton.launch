@@ -1,0 +1,8 @@
+<launch>
+    <!-- These are only needed for playing back and visualizing rosbag data which is compressed 
+        On the actual platform we do not need these as we have access to the raw data directly
+    -->
+    <!-- Convert the /$(arg camera_id)/compressed topic into /$(arg camera_id)" -->
+    <node name="lepton_republisher" type="republish" pkg="image_transport" output="screen" args="compressed in:=/lepton/image_raw raw out:=/lepton/image_raw" />
+
+</launch>

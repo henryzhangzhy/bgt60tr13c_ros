@@ -88,14 +88,14 @@ if __name__ == '__main__':
         msg.layout.dim.append(MultiArrayDimension())
 
         msg.layout.dim[0].label = "Receiver"
-        msg.layout.dim[0].size = 3
-        msg.layout.dim[0].stride = 3*128*64
+        msg.layout.dim[0].size = 1
+        msg.layout.dim[0].stride = 1*config.num_chirps_per_frame*config.num_samples_per_chirp
         msg.layout.dim[1].label = "chirps_per_frame"
-        msg.layout.dim[1].size = 128
-        msg.layout.dim[1].stride = 64*128
+        msg.layout.dim[1].size = config.num_chirps_per_frame
+        msg.layout.dim[1].stride = config.num_samples_per_chirp*config.num_chirps_per_frame
         msg.layout.dim[2].label = "samples_per_chirp"
-        msg.layout.dim[2].size = 64
-        msg.layout.dim[2].stride = 64
+        msg.layout.dim[2].size = config.num_samples_per_chirp
+        msg.layout.dim[2].stride = config.num_samples_per_chirp
 
         msg.data = frame.flatten().tolist()
         #print(msg.data)

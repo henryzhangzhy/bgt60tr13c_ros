@@ -107,23 +107,28 @@ class PresenceAntiPeekingAlgo:
 
 
 def radar_callback(msg):
+
+    # antenna_active = 1
+    # num_chirps_per_frame = 32
+    # num_samples_per_chirp = 64
+
     # Need to reshape message back into the normal dimensions to make sure it looks the same
     # msg.layout.dim[0].label = "Receiver"
-    size1 = msg.layout.dim[0].size = 3
+    antenna_active = msg.layout.dim[0].size# = antenna_active
     # msg.layout.dim[0].stride = 3*128*64
     # msg.layout.dim[1].label = "chirps_per_frame"
-    size2 = msg.layout.dim[1].size = 128
+    num_chirps_per_frame = msg.layout.dim[1].size# = num_chirps_per_frame
     # msg.layout.dim[1].stride = 64*128
     # msg.layout.dim[2].label = "samples_per_chirp"
-    size3 = msg.layout.dim[2].size = 64
+    num_samples_per_chirp = msg.layout.dim[2].size# = num_samples_per_chirp
     # msg.layout.dim[2].stride = 64
 
-    frame = np.array(msg.data).reshape(size1, size2, size3)
+    frame = np.array(msg.data).reshape(antenna_active, num_chirps_per_frame, num_samples_per_chirp)
     #print(radar_data)
 
 
-    num_chirps_per_frame = 128
-    num_samples_per_chirp = 64
+    # num_chirps_per_frame = 128
+    # num_samples_per_chirp = 64
     algo = PresenceAntiPeekingAlgo(num_samples_per_chirp, num_chirps_per_frame)
 
     # matrix of dimension num_chirps_per_frame x num_samples_per_chirp for RX1

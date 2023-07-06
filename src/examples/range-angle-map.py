@@ -113,6 +113,19 @@ class LivePlot:
     def is_closed(self):
         return not self._is_window_open
 
+
+def find_peak(data):
+    max_value = float('-inf')
+    peak_index = None
+
+    for i in range(data.shape[0]):
+        for j in range(data.shape[1]):
+            value = data[i, j]
+            if value > max_value:
+                max_value = value
+                peak_index = (i, j)
+
+    return peak_index, max_value
 # -------------------------------------------------
 # Main logic
 # -------------------------------------------------
@@ -130,7 +143,7 @@ if __name__ == '__main__':
         end_frequency_Hz = 61.5e9,        # 61.5GHz
         num_chirps_per_frame = 128,       # 128 chirps per frame
         num_samples_per_chirp = 64,       # 64 samples per chirp
-        chirp_repetition_time_s = 0.0005, # 0.5ms
+        chirp_repetition_time_s = 0.0001, #0.0005, # 0.5ms
         frame_repetition_time_s = 0.15,   # 0.15s, frame_Rate = 6.667Hz
         mimo_mode = 'off'                 # MIMO disabled
     )
@@ -145,6 +158,7 @@ if __name__ == '__main__':
 
         # get maximum range
         max_range_m = metrics.max_range_m
+        print("Max range is :" , max_range_m)
 
         # Create frame handle
         num_rx_antennas = num_rx_antennas_from_config(config)
@@ -179,15 +193,20 @@ if __name__ == '__main__':
             # Maximum energy in Range-Angle map
             max_energy = np.max(beam_range_energy)
 
+            #print("beam energy: ", beam_range_energy.shape)
             # Rescale map to better capture the peak The rescaling is done in a
             # way such that the maximum always has the same value, independent
             # on the original input peak. A proper peak search can greatly
             # improve this algorithm.
             scale = 150
             beam_range_energy = scale*(beam_range_energy/max_energy - 1)
+            idx, max_value = find_peak(beam_range_energy)
+            idx = idx[1]
+            #print("Our idx: ", idx)
 
             # Find dominant angle of target
-            _, idx = np.unravel_index(beam_range_energy.argmax(), beam_range_energy.shape)
+            #_, idx = np.unravel_index(beam_range_energy.argmax(), beam_range_energy.shape)
+            #print("Their idx: ", idx)
             angle_degrees = np.linspace(-max_angle_degrees, max_angle_degrees, num_beams)[idx]
 
             # And plot...

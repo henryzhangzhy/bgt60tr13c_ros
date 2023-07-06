@@ -4,9 +4,16 @@ import rospy
 import numpy as np
 from ifxAvian import Avian
 
-from std_msgs.msg import Float32MultiArray, MultiArrayDimension
+from std_msgs.msg import Float32MultiArray, MultiArrayDimension, StampedFloat32MultiArray
 
+def num_rx_antennas_from_rx_mask(rx_mask):
 
+    # popcount for rx_mask
+    c = 0
+    for i in range(32):
+        if rx_mask & (1 << i):
+            c += 1
+    return c
 
 if __name__ == '__main__':
     rospy.init_node("radar_tr13c_node")
@@ -70,7 +77,7 @@ if __name__ == '__main__':
     device.set_config(config) # Sets the config AND starts data acquisition of time domain data
 
 
-    # count = 0
+    count = 0
     # data_stack = np.zeros((0, 256))
     while not rospy.is_shutdown():
         #frame, metadata = device.get_next_frame() # Frame is a numpy array of shape (num_of_samples, )
@@ -98,14 +105,22 @@ if __name__ == '__main__':
         frame = device.get_next_frame()
         #print("Before: ", frame[0,:,:])
 
-        msg = Float32MultiArray()
+        #msg = Float32MultiArray()
+        msg = StampedFloat32MultiArray()
+
+        msg.header.seq = count
+        count += 1
+        msg.header.stamp = rospy.Time.now()
+        msg.header.frame_id = 'radar_frame'
+
+
         msg.layout.dim.append(MultiArrayDimension())
         msg.layout.dim.append(MultiArrayDimension())
         msg.layout.dim.append(MultiArrayDimension())
 
         msg.layout.dim[0].label = "Receiver"
-        msg.layout.dim[0].size = 1
-        msg.layout.dim[0].stride = 1*config.num_chirps_per_frame*config.num_samples_per_chirp
+        msg.layout.dim[0].size = num_rx_antennas_from_rx_mask(config.rx_mask)
+        msg.layout.dim[0].stride = num_rx_antennas_from_rx_mask(config.rx_mask)*config.num_chirps_per_frame*config.num_samples_per_chirp
         msg.layout.dim[1].label = "chirps_per_frame"
         msg.layout.dim[1].size = config.num_chirps_per_frame
         msg.layout.dim[1].stride = config.num_samples_per_chirp*config.num_chirps_per_frame

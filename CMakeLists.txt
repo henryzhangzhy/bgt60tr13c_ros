@@ -51,6 +51,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   Complex64Array.msg
+  StampedFloat32MultiArray.msg
 )
 
 ## Generate services in the 'srv' folder
